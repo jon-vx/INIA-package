@@ -9,8 +9,8 @@ fine-tuning + evaluation workflows for both are covered below.
 
 
 ```bash
-git clone https://github.com/jon-vx/team-SAMv3-impact.git
-cd team-SAMv3-impact
+git clone https://github.com/jon-vx/INIA-package.git
+cd INIA-package
 source setup.sh # with conda in (base)
 ```
 

@@ -24,8 +24,8 @@ Requires Python 3.12+ and, realistically, an NVIDIA GPU (training on CPU is
 unusably slow).
 
 ```bash
-git clone https://github.com/jon-vx/team-SAMv3-impact.git
-cd team-SAMv3-impact
+git clone https://github.com/jon-vx/INIA-package.git
+cd INIA-package
 ./setup.sh                 # or: source setup.sh  to activate the env in current shell
 ```
 
