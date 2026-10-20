@@ -17,7 +17,7 @@ from typing import Optional, Union
 
 import numpy as np
 
-from impact_team_2.visual.utils import resize_mask
+from inia_seg.visual.utils import resize_mask
 
 PathLike = Union[str, Path]
 ImageLike = Union[np.ndarray, "PILImage.Image"]  # noqa: F821

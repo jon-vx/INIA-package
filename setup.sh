@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Create/update the impact-team-2 conda env and (if sourced) activate it.
+# Create/update the inia-seg conda env and (if sourced) activate it.
 #
 # Usage:
 #   source setup.sh        # creates/updates env, activates it in this shell
@@ -18,7 +18,7 @@ set -e
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 ENV_FILE="${REPO_ROOT}/environment.yml"
-ENV_NAME="${CONDA_ENV_NAME:-impact-team-2}"
+ENV_NAME="${CONDA_ENV_NAME:-inia-seg}"
 
 if ! command -v conda >/dev/null 2>&1; then
     echo "[setup] conda not found on PATH — install Miniconda/Anaconda first." >&2
@@ -118,8 +118,8 @@ fi
 CONDA_PREFIX_DIR="$(conda run --name "${ENV_NAME}" printenv CONDA_PREFIX 2>/dev/null || true)"
 if [ -n "${CONDA_PREFIX_DIR}" ] && [ -d "${CONDA_PREFIX_DIR}" ]; then
     mkdir -p "${CONDA_PREFIX_DIR}/etc/conda/activate.d" "${CONDA_PREFIX_DIR}/etc/conda/deactivate.d"
-    cat > "${CONDA_PREFIX_DIR}/etc/conda/activate.d/impact_team_2.sh" <<'ACT'
-# impact_team_2: add pip-installed NVIDIA wheel libs (cuDNN/cuBLAS/NCCL) to the
+    cat > "${CONDA_PREFIX_DIR}/etc/conda/activate.d/inia_seg.sh" <<'ACT'
+# inia_seg: add pip-installed NVIDIA wheel libs (cuDNN/cuBLAS/NCCL) to the
 # loader path, and point XLA at libdevice.10.bc from nvidia-cuda-nvcc-cu12.
 export _IT2_OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}"
 export _IT2_OLD_XLA_FLAGS="${XLA_FLAGS:-}"
@@ -142,7 +142,7 @@ done
 { unsetopt nullglob 2>/dev/null || true; }
 unset _IT2_LIBS _d
 ACT
-    cat > "${CONDA_PREFIX_DIR}/etc/conda/deactivate.d/impact_team_2.sh" <<'DEA'
+    cat > "${CONDA_PREFIX_DIR}/etc/conda/deactivate.d/inia_seg.sh" <<'DEA'
 if [ -n "${_IT2_OLD_LD_LIBRARY_PATH+x}" ]; then
     export LD_LIBRARY_PATH="${_IT2_OLD_LD_LIBRARY_PATH}"
     unset _IT2_OLD_LD_LIBRARY_PATH

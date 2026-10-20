@@ -12,7 +12,7 @@ from matplotlib.figure import Figure
 from PIL import Image as PILImage
 from tqdm import tqdm
 
-from impact_team_2.visual.utils import best_mask, dice_score, resize_mask, summarize_dice
+from inia_seg.visual.utils import best_mask, dice_score, resize_mask, summarize_dice
 
 
 PredictFn = Callable[..., dict]

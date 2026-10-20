@@ -1,4 +1,4 @@
-name: impact-team-2
+name: inia-seg
 channels:
   - conda-forge
 dependencies:

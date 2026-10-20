@@ -19,7 +19,7 @@ from torchmetrics import MeanMetric, MetricCollection
 from torchmetrics.classification import BinaryF1Score, BinaryJaccardIndex
 from transformers import Sam3Model, Sam3Processor
 
-from impact_team_2.train.data import SAM3Dataset, make_fake_box
+from inia_seg.train.data import SAM3Dataset, make_fake_box
 
 PathLike = Union[str, Path]
 _CHECKPOINT_NAME = "sam3_finetuned_weights.safetensors"
@@ -240,7 +240,7 @@ def _compute_boxes(
     if source == "unet":
         if unet_model is None:
             raise ValueError("source='unet' requires unet_model")
-        from impact_team_2.inference._inference_sam3 import _box_from_unet, _to_pil
+        from inia_seg.inference._inference_sam3 import _box_from_unet, _to_pil
         boxes = np.zeros((masks.shape[0], 4))
         misses = 0
         for i in range(masks.shape[0]):

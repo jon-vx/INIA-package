@@ -9,7 +9,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 
 from _data import ensure_spleen_data
-from impact_team_2.train import train_medsam3, TrainingConfig
+from inia_seg.train import train_medsam3, TrainingConfig
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 OUTPUT_DIR = REPO_ROOT / "runs" / "medsam3_finetune"
@@ -35,7 +35,7 @@ best_weights = train_medsam3(
 print(f"Best LoRA weights: {best_weights}")
 
 # --- visualize training curves --------------------------------------------
-from impact_team_2.visual import (
+from inia_seg.visual import (
     evaluate,
     show_prediction_grid,
     show_training_curves,
@@ -49,7 +49,7 @@ if TRAINING_STATS.exists():
     )
 
 # --- evaluate on val split and show prediction grid -----------------------
-from impact_team_2.inference import build_predictor
+from inia_seg.inference import build_predictor
 
 _, val_idx = train_test_split(
     range(images.shape[0]), test_size=0.2, random_state=42

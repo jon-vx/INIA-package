@@ -93,7 +93,7 @@ def load_unet_weights(weights_path: PathLike):
     weights_path = str(weights_path)
     if weights_path in _unet_cache:
         return _unet_cache[weights_path]
-    from impact_team_2.vendor.team_one.INIA import get_model
+    from inia_seg.vendor.team_one.INIA import get_model
     unet = get_model("unet++")
     unet.predict(np.zeros((1, _UNET_SIZE, _UNET_SIZE, 1), dtype=np.float32), verbose=0)
     unet.load_weights(weights_path)
@@ -104,7 +104,7 @@ def load_unet_weights(weights_path: PathLike):
 
 def _box_from_unet(unet_model, pil_img: PILImage.Image, threshold: float = 0.5) -> Optional[list]:
     """Run INIA get_bboxes on the image and scale the result to original dimensions."""
-    from impact_team_2.vendor.team_one.INIA import get_bboxes
+    from inia_seg.vendor.team_one.INIA import get_bboxes
     orig_w, orig_h = pil_img.size
     gray = np.array(pil_img.convert("L").resize((_UNET_SIZE, _UNET_SIZE))) / 255.0
     inp = gray[np.newaxis, :, :, np.newaxis].astype(np.float32)

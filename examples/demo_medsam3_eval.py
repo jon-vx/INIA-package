@@ -14,8 +14,8 @@ from sklearn.model_selection import train_test_split
 
 from _data import load_spleen_data
 
-import impact_team_2 as I
-from impact_team_2.visual import show_prediction_grid, show_training_curves, worst_dice
+import inia_seg as I
+from inia_seg.visual import show_prediction_grid, show_training_curves, worst_dice
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUN_DIR = REPO_ROOT / "runs" / "medsam3_finetune"

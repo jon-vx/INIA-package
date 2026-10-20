@@ -14,7 +14,7 @@ cd team-SAMv3-impact
 source setup.sh # with conda in (base)
 ```
 
-A Hugging Face token is required at runtime. `impact_team_2` auto-loads `.env.local`
+A Hugging Face token is required at runtime. `inia_seg` auto-loads `.env.local`
 on import, and `huggingface_hub` / `transformers` pick up `HF_TOKEN` from the
 environment — so just drop the token into `.env.local`:
 
@@ -36,7 +36,7 @@ echo "HF_TOKEN=hf_xxxxxxxxxxxxx" > .env.local
 Unified API:
 
 ```python
-import impact_team_2 as I
+import inia_seg as I
 
 # Default: MedSAM3, public weights.
 mask = I.predict("image.png", prompt="spleen", model="MedSAM")
@@ -48,7 +48,7 @@ mask = I.predict("image.png", prompt="spleen", model="SAM", mode="finetuned")
 ### MedSAM3
 
 ```python
-from impact_team_2.inference import predict, build_predictor
+from inia_seg.inference import predict, build_predictor
 
 # Lazy-built predictor backed by lal-Joey/MedSAM3_v1
 result = predict("image.png", "spleen", threshold=0.5)
@@ -74,7 +74,7 @@ SAM3 uses a two-stage prompt: a vendor Keras UNet (INIA) predicts a segmentation
 dimensions, and SAM3 uses that box plus a text prompt to produce the final mask.
 
 ```python
-from impact_team_2.inference._inference_sam3 import build_predictor, load_unet_weights
+from inia_seg.inference._inference_sam3 import build_predictor, load_unet_weights
 
 # Option 1 — load the UNet weights explicitly (cached across calls)
 unet = load_unet_weights("checkpoints/best_unetp.weights.h5")
@@ -119,7 +119,7 @@ predictor = build_predictor(
 
 ```python
 import numpy as np
-from impact_team_2.train import train_medsam3
+from inia_seg.train import train_medsam3
 
 images = np.load("datasets/images.npz")["images"]      # (N, H, W, 3) uint8
 masks  = np.load("datasets/masks.npz")["masks"] > 0    # (N, H, W) bool
@@ -135,7 +135,7 @@ best_weights = train_medsam3(
 
 ```python
 import numpy as np
-from impact_team_2.train.sam import train_sam
+from inia_seg.train.sam import train_sam
 
 images = np.load("datasets/images.npz")["images"]      # (N, H, W, 3) uint8
 masks  = np.load("datasets/masks.npz")["masks"] > 0    # (N, H, W) bool
@@ -170,8 +170,8 @@ goes to the canonical filename; the most recent epoch lands in
 
 
 ```python
-from impact_team_2.inference import build_predictor
-from impact_team_2.visual import (
+from inia_seg.inference import build_predictor
+from inia_seg.visual import (
     evaluate, show_prediction_grid, show_training_curves,
     worst_dice, best_dice,
     save_overlay, save_comparison_overlay, save_contact_sheet,
@@ -225,7 +225,7 @@ spotting failure patterns across the whole val split at a glance.
 | `examples/demo_api.py`               | End-to-end unified-API demo: baseline eval → fine-tune SAM3 + MedSAM3 → eval → side-by-side comparison.                 |
 
 ```bash
-conda activate impact-team-2
+conda activate inia-seg
 
 # Single-image predict (quickest smoke test)
 python examples/demo_api_predict.py
@@ -257,7 +257,7 @@ python examples/demo_api.py
 ├── examples/                      # runnable example scripts
 ├── environment.yml                # conda env spec (Linux + cu126 + TF 2.19)
 ├── setup.sh                       # conda env create/update + CUDA-aware torch/TF install
-└── src/impact_team_2/
+└── src/inia_seg/
     ├── api.py                     # unified predict / evaluate API
     ├── inference/
     │   ├── _inference_medsam3.py  # native sam3 + LoRA inference
