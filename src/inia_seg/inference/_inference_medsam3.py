@@ -28,7 +28,7 @@ from sam3.train.transforms.basic_for_api import (
 )
 from torchvision.ops import nms
 
-from impact_team_2.vendor.medsam3.lora_layers import (
+from inia_seg.vendor.medsam3.lora_layers import (
     LoRAConfig,
     apply_lora_to_model,
     load_lora_weights,

@@ -31,9 +31,9 @@ from sklearn.model_selection import train_test_split
 
 from _data import load_spleen_data
 
-import impact_team_2 as I
-from impact_team_2.vendor.team_one.INIA import fit, preprocess
-from impact_team_2.inference._inference_sam3 import load_unet_weights
+import inia_seg as I
+from inia_seg.vendor.team_one.INIA import fit, preprocess
+from inia_seg.inference._inference_sam3 import load_unet_weights
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CKPT_DIR = REPO_ROOT / "checkpoints"

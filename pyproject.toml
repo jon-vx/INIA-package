@@ -1,10 +1,11 @@
 [project]
-name = "impact-team-2"
+name = "inia-seg"
 version = "0.1.0"
-description = "Add your description here"
+description = "For INIA Bioscience"
 readme = "README.md"
 authors = [
-    { name = "Blake Moody", email = "32070003+blayyyyyk@users.noreply.github.com" }
+    { name = "Blake Moody", email = "32070003+blayyyyyk@users.noreply.github.com" },
+    { name = "Jon Allen", email = "jonvx0@gmail.com" },
 ]
 requires-python = ">=3.12"
 dependencies = [
@@ -40,9 +41,6 @@ unet = [
     # Linux-only; on macOS TF uses Metal and doesn't need it.
     "nvidia-cuda-nvcc-cu12; platform_system == 'Linux'",
 ]
-
-[project.scripts]
-impact-team-2 = "impact_team_2:main"
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]

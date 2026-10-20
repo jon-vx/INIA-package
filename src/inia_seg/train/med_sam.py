@@ -14,8 +14,8 @@ from PIL import Image as PILImage
 from huggingface_hub import snapshot_download
 from sklearn.model_selection import train_test_split
 
-from impact_team_2.vendor.medsam3.lora_layers import load_lora_weights
-from impact_team_2.vendor.medsam3.train_sam3_lora_native import SAM3TrainerNative
+from inia_seg.vendor.medsam3.lora_layers import load_lora_weights
+from inia_seg.vendor.medsam3.train_sam3_lora_native import SAM3TrainerNative
 
 
 # ---------------------------------------------------------------------------
@@ -159,7 +159,7 @@ def train_medsam3(
 
     Returns:
         Path to `best_lora_weights.pt` (the same checkpoint format the inference
-        path in `impact_team_2.inference` consumes).
+        path in `inia_seg.inference` consumes).
     """
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)

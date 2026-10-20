@@ -28,7 +28,7 @@ from safetensors.torch import load_file
 
 from _data import load_spleen_data
 
-from impact_team_2.train.sam import train_sam
+from inia_seg.train.sam import train_sam
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -73,7 +73,7 @@ def main() -> int:
 
     unet_model = None
     if args.box_source == "unet":
-        from impact_team_2.inference._inference_sam3 import load_unet_weights
+        from inia_seg.inference._inference_sam3 import load_unet_weights
         if not args.unet.exists():
             raise FileNotFoundError(
                 f"--box-source=unet needs a UNet checkpoint but {args.unet} doesn't exist. "
@@ -113,7 +113,7 @@ def main() -> int:
     # --- inference load-check ---------------------------------------------
     if not args.no_inference_check:
         print(f"[train] verifying inference can load the checkpoint")
-        from impact_team_2.inference._inference_sam3 import build_predictor
+        from inia_seg.inference._inference_sam3 import build_predictor
         predictor = build_predictor(weights_path=ckpt)
         out = predictor(images[0], "spleen", threshold=0.01)
         print(f"[train] inference OK — detections: {out['num_detections']}")

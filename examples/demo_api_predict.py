@@ -8,8 +8,8 @@ from pathlib import Path
 
 from _data import load_spleen_data
 
-import impact_team_2 as I
-from impact_team_2.visual import dice_score, save_overlay
+import inia_seg as I
+from inia_seg.visual import dice_score, save_overlay
 
 OUT_DIR = Path("runs/predict_demo")
 

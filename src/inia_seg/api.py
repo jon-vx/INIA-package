@@ -2,7 +2,7 @@
 
 Usage:
 
-    import impact_team_2 as I
+    import inia_seg as I
 
     # Simple: returns the best predicted mask (bool ndarray).
     mask = I.predict(images[0], prompt="spleen", model="SAM")
@@ -27,7 +27,7 @@ from typing import Callable, Literal, Optional, Sequence, overload
 import numpy as np
 from tqdm import tqdm
 
-from impact_team_2.visual.utils import best_mask, dice_score, resize_mask, summarize_dice
+from inia_seg.visual.utils import best_mask, dice_score, resize_mask, summarize_dice
 
 
 Model = str   # "SAM" | "MedSAM"
@@ -86,7 +86,7 @@ def _build_predictor(model: Model, mode: Mode, sam_use_unet: bool = True) -> Pre
         clear_cache()
 
     if model == "MedSAM":
-        from impact_team_2.inference._inference_medsam3 import build_predictor
+        from inia_seg.inference._inference_medsam3 import build_predictor
         if mode == "not_finetuned":
             pred = build_predictor()  # public baseline
         else:
@@ -94,11 +94,11 @@ def _build_predictor(model: Model, mode: Mode, sam_use_unet: bool = True) -> Pre
             if not ckpt.exists():
                 raise FileNotFoundError(
                     f"MedSAM finetuned checkpoint not found at {ckpt}. "
-                    f"Run `impact_team_2.train.train_medsam3` first."
+                    f"Run `inia_seg.train.train_medsam3` first."
                 )
             pred = build_predictor(ckpt)
     elif model == "SAM":
-        from impact_team_2.inference._inference_sam3 import build_predictor
+        from inia_seg.inference._inference_sam3 import build_predictor
         unet_weights = (
             _UNET_WEIGHTS if sam_use_unet and _UNET_WEIGHTS.exists() else None
         )
@@ -109,7 +109,7 @@ def _build_predictor(model: Model, mode: Mode, sam_use_unet: bool = True) -> Pre
             if not ckpt.exists():
                 raise FileNotFoundError(
                     f"SAM finetuned checkpoint not found at {ckpt}. "
-                    f"Run `impact_team_2.train.sam.train_sam` first."
+                    f"Run `inia_seg.train.sam.train_sam` first."
                 )
             pred = build_predictor(weights_path=ckpt, unet_weights=unet_weights)
     else:
@@ -330,7 +330,7 @@ def _write_overlays(
     overlay_buf: list[dict],
     how: "int | str",
 ) -> None:
-    from impact_team_2.visual.overlays import save_overlay, resolve_save_indices
+    from inia_seg.visual.overlays import save_overlay, resolve_save_indices
 
     indices = resolve_save_indices(dice_scores, how)
     out_dir.mkdir(parents=True, exist_ok=True)

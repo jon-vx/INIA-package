@@ -1,4 +1,4 @@
-"""End-to-end `impact_team_2` API showcase.
+"""End-to-end `inia_seg` API showcase.
 
 Flow:
   1. Evaluate vanilla SAM3 + base MedSAM3 on the held-out val split.
@@ -21,9 +21,9 @@ from sklearn.model_selection import train_test_split
 
 from _data import load_spleen_data
 
-import impact_team_2 as I  # noqa: E402
-from impact_team_2.train import train_medsam3
-from impact_team_2.train.sam import train_sam
+import inia_seg as I  # noqa: E402
+from inia_seg.train import train_medsam3
+from inia_seg.train.sam import train_sam
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 RUNS = REPO_ROOT / "runs"
@@ -138,7 +138,7 @@ for model in ("SAM", "MedSAM"):
 
 
 # --- 6. per-image comparison + contact sheets -----------------------------
-from impact_team_2.visual import best_mask, save_comparison_overlay, save_contact_sheet
+from inia_seg.visual import best_mask, save_comparison_overlay, save_contact_sheet
 
 
 models = ("SAM", "MedSAM")

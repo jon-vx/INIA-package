@@ -1,4 +1,4 @@
-# `impact_team_2` — User Guide
+# `inia_seg` — User Guide
 
 End-to-end reference for fine-tuning and evaluating SAM3 / MedSAM3 on custom
 segmentation data. The README has a quickstart; this document is the full
@@ -8,7 +8,7 @@ you're likely to call, and the footguns we've hit ourselves.
 - [1. Install](#1-install)
 - [2. Mental model](#2-mental-model)
 - [3. Data expectations](#3-data-expectations)
-- [4. The unified API (`impact_team_2 as I`)](#4-the-unified-api-impact_team_2-as-i)
+- [4. The unified API (`inia_seg as I`)](#4-the-unified-api-inia_seg-as-i)
 - [5. Fine-tuning](#5-fine-tuning)
 - [6. Visualization](#6-visualization)
 - [7. Example scripts](#7-example-scripts)
@@ -29,7 +29,7 @@ cd team-SAMv3-impact
 ./setup.sh                 # or: source setup.sh  to activate the env in current shell
 ```
 
-`setup.sh` creates (or updates) the `impact-team-2` conda env. On Linux +
+`setup.sh` creates (or updates) the `inia-seg` conda env. On Linux +
 NVIDIA with a CUDA 12.x driver it uses `environment.yml` (torch 2.7.x on the
 cu126 wheel index + TF 2.19, the cuDNN 9 stack that keeps torch and TF from
 colliding on plugin registration). Older drivers, Apple Silicon, and CPU-only
@@ -42,7 +42,7 @@ pip-installed NVIDIA wheel libs to `LD_LIBRARY_PATH` and point `XLA_FLAGS` at
 ### HuggingFace token
 
 Both SAM3 (`facebook/sam3`) and MedSAM3 (`lal-Joey/MedSAM3_v1`) are gated /
-private. `impact_team_2` auto-loads `.env.local` on import:
+private. `inia_seg` auto-loads `.env.local` on import:
 
 ```bash
 echo "HF_TOKEN=hf_xxxxxxxxxxxxx" > .env.local
@@ -53,8 +53,8 @@ Without it, the first predictor build will fail on the model download.
 ### Verifying the install
 
 ```bash
-conda activate impact-team-2
-python -c "import impact_team_2 as I; print('OK')"
+conda activate inia-seg
+python -c "import inia_seg as I; print('OK')"
 ```
 
 For a full smoke test, run `python examples/demo_api_predict.py` — it
@@ -77,16 +77,16 @@ Two models. Both fine-tunable. One API.
 
 Every operation lives at one of three layers:
 
-1. **`impact_team_2.api`** — `I.predict` / `I.evaluate`. Model-agnostic;
+1. **`inia_seg.api`** — `I.predict` / `I.evaluate`. Model-agnostic;
    resolves `(model, mode)` to the right backend.
-2. **`impact_team_2.inference`** — backend-specific predictor builders
+2. **`inia_seg.inference`** — backend-specific predictor builders
    (`_inference_medsam3.py`, `_inference_sam3.py`). Call these when you need
    a predictor bound to a non-canonical checkpoint path.
-3. **`impact_team_2.train`** — fine-tuning entry points (`train_medsam3`,
+3. **`inia_seg.train`** — fine-tuning entry points (`train_medsam3`,
    `train_sam`). Both take in-memory `(images, masks)` arrays and write
    checkpoints to `output_dir`.
 
-`impact_team_2.visual` supplies the evaluation / rendering helpers that all
+`inia_seg.visual` supplies the evaluation / rendering helpers that all
 three layers use.
 
 ---
@@ -132,7 +132,7 @@ keeps models from training on frames they're later evaluated against.
 
 ---
 
-## 4. The unified API (`impact_team_2 as I`)
+## 4. The unified API (`inia_seg as I`)
 
 ### `I.predict(image, prompt, *, model, mode, threshold, sam_use_unet, return_details)`
 
@@ -150,7 +150,7 @@ Single-image inference. Returns the best (highest-score) predicted mask as a
 | `return_details` | `False`             | `True` returns the full backend dict (boxes, all scores, all masks, PIL image). |
 
 ```python
-import impact_team_2 as I
+import inia_seg as I
 
 mask = I.predict("scan.png", prompt="spleen", model="MedSAM")          # public weights
 mask = I.predict(img_arr,    prompt="spleen", model="SAM",
@@ -212,7 +212,7 @@ the demos do this.
 ### `train_medsam3(images, masks, output_dir, *, category, val_split, seed, lora_config, training_config, pretrained_lora)`
 
 ```python
-from impact_team_2.train import train_medsam3, TrainingConfig, LoRAConfig
+from inia_seg.train import train_medsam3, TrainingConfig, LoRAConfig
 
 best_weights = train_medsam3(
     images, masks,
@@ -247,7 +247,7 @@ decoder enabled.
 ### `train_sam(images, masks, *, output_dir, epochs, lr, val_split, seed, box_source, unet_model, text_prompt)`
 
 ```python
-from impact_team_2.train.sam import train_sam
+from inia_seg.train.sam import train_sam
 
 ckpt = train_sam(
     images, masks,
@@ -281,18 +281,18 @@ the last checkpoint is promoted to the "best" slot.
 ### `train_sam_from_files(images_in, masks_in, model_out, ...)`
 
 CLI-friendly wrapper — takes `.npz` paths instead of arrays. The module also
-exposes a `__main__` so `python -m impact_team_2.train.sam ...` works.
+exposes a `__main__` so `python -m inia_seg.train.sam ...` works.
 
 ---
 
 ## 6. Visualization
 
-Everything under `impact_team_2.visual`:
+Everything under `inia_seg.visual`:
 
 ### Per-case helpers
 
 ```python
-from impact_team_2.visual import (
+from inia_seg.visual import (
     best_mask, dice_score, resize_mask, summarize_dice,
     save_overlay, save_comparison_overlay, save_contact_sheet, resolve_save_indices,
 )
@@ -312,7 +312,7 @@ from impact_team_2.visual import (
 ### Dataset-level plots
 
 ```python
-from impact_team_2.visual import (
+from inia_seg.visual import (
     evaluate, show_prediction_grid, show_training_curves, worst_dice, best_dice,
 )
 ```
@@ -353,7 +353,7 @@ them in sequence downloads the dataset once.
 | `demo_api.py`                        | End-to-end showcase: baseline eval → finetune both models → evaluate → comparison table + per-image grids + contact sheets. Reference for how the API is meant to be used. |
 
 ```bash
-conda activate impact-team-2
+conda activate inia-seg
 
 # Quickest smoke test
 python examples/demo_api_predict.py
@@ -386,10 +386,10 @@ Three files matter:
 - `checkpoints/best_unetp.weights.h5` — the canonical UNet weights path.
   `demo_sam3_unet_cascade.py` produces it; other scripts consume it when you
   pass `sam_use_unet=True`.
-- `src/impact_team_2/inference/_inference_sam3.py::_box_from_unet` — the
+- `src/inia_seg/inference/_inference_sam3.py::_box_from_unet` — the
   inference-time integration: grayscale-resize the image to 320×320, run the
   UNet, extract bbox, scale back to original image coordinates, hand to SAM3.
-- `src/impact_team_2/vendor/team_one/INIA.py` — the vendored UNet++ trainer
+- `src/inia_seg/vendor/team_one/INIA.py` — the vendored UNet++ trainer
   (`fit`, `load_data`, `preprocess`, `get_bboxes`, `plot_history`).
 
 To use the cascade at inference:
@@ -404,7 +404,7 @@ out = I.evaluate(
 )
 
 # Direct
-from impact_team_2.inference._inference_sam3 import build_predictor
+from inia_seg.inference._inference_sam3 import build_predictor
 predictor = build_predictor(unet_weights="checkpoints/best_unetp.weights.h5")
 result = predictor(img, text_prompt="spleen")
 ```
@@ -457,9 +457,9 @@ allocation.
 
 ### "TF initializes before torch and grabs the whole GPU"
 
-`impact_team_2/__init__.py` sets `TF_FORCE_GPU_ALLOW_GROWTH=true` and
+`inia_seg/__init__.py` sets `TF_FORCE_GPU_ALLOW_GROWTH=true` and
 `TF_GPU_ALLOCATOR=cuda_malloc_async` before anything else is imported, so
-the fix is in place as long as you `import impact_team_2` (or anything from
+the fix is in place as long as you `import inia_seg` (or anything from
 it) before importing TF directly. If you import TF first, undo it with
 those env vars set explicitly.
 
@@ -490,10 +490,10 @@ through `I.predict(mode="finetuned")`.
 ## 10. Module map
 
 ```
-src/impact_team_2/
+src/inia_seg/
 ├── api.py                        # I.predict / I.evaluate / I.clear_cache
 ├── __init__.py                   # env setup, .env.local load, re-exports
-├── __main__.py                   # `python -m impact_team_2`
+├── __main__.py                   # `python -m inia_seg`
 ├── inference/
 │   ├── __init__.py               # predict / build_predictor re-export (MedSAM default)
 │   ├── _inference_medsam3.py     # native sam3 + LoRA predictor
